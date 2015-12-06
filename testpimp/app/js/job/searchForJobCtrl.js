@@ -23,7 +23,7 @@ angular.module('testpimp').controller('searchForJobCtr', function ($rootScope, $
             }
     );
 
-	$scope.changeNuggetJobs = function() {        
+	/*$scope.changeNuggetJobs = function() {        
         requestService.getAllJobs().then(
             function(success) {
             	if($scope.jobCats == "All jobs") {
@@ -45,7 +45,38 @@ angular.module('testpimp').controller('searchForJobCtr', function ($rootScope, $
             }
     );
 
-    } 
+    }*/
+
+
+    $scope.changeNuggetJobs = function() {   
+       requestService.getJobs().then(
+           function(success) {
+           	console.log(success.data);
+           	if($scope.jobCats == "All jobs") {
+                   $scope.jobs = []; 
+                   for(var obj in success.data){       
+console.log(success.data);                 
+                       if (success.data[obj]["status"] == "Active") {                    
+                           $scope.jobs.push(success.data[obj])                  
+                       }                 
+                   }
+               } 
+               else {
+                    $scope.jobs = [];                
+                    for(var obj in success.data){       
+console.log(success.data);                 
+                       if (success.data[obj]["category"] == $scope.jobCats && success.data[obj]["status"] == "Active") {                    
+                           $scope.jobs.push(success.data[obj])                  
+                       }                 
+                   }
+               }
+
+           },
+            function(error){
+
+           }
+   );
+   } 
 	
 	requestService.getMyProviderProfiles($scope.user.id).then(
 			function(success) {
